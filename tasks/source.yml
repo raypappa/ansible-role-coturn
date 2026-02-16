@@ -27,7 +27,7 @@
       - --strip-components=1
 - name: Source | create build directory for prometheus-client-c
   ansible.builtin.file:
-    name: "{{ coturn_install_src_prom_temp_dir }}/prom/build"
+    name: "{{ coturn_install_src_prom_temp_dir.path }}/prom/build"
 - name: Source | build prometheus-client-c
   environment:
     TEST: "0"
