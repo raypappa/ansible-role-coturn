@@ -1,6 +1,6 @@
 - name: Install using APT
   ansible.builtin.import_tasks: debian.yml
-  when: coturn_install == "pkg" and ansible_os_family == "Debian"
+  when: coturn_install == "pkg" and ansible_facts['os_family']|lower == 'debian'
 - name: Install from Source
   ansible.builtin.import_tasks: source.yml
   when: coturn_install == "src"
