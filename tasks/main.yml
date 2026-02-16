@@ -1,39 +1,33 @@
----
-- name: Install coturn
-  ansible.builtin.apt:
-    pkg: coturn
-    state: present
-    cache_valid_time: 3600
-
+- name: Install using APT
+  ansible.builtin.import_tasks: debian.yml
+  when: coturn_install == "pkg" and ansible_os_family == "Debian"
+- name: Install from Source
+  ansible.builtin.import_tasks: source.yml
+  when: coturn_install == "src"
 - name: Give coturn access to TLS cert
   ansible.builtin.user:
     name: turnserver
     groups: "{{ coturn_tls_group }}"
     append: true
   when: coturn_tls and coturn_tls_group is defined
-
 - name: Enable /etc/default/coturn
   ansible.builtin.lineinfile:
     dest: /etc/default/coturn
     line: TURNSERVER_ENABLED=1
     regexp: "^#?TURNSERVER_ENABLED="
-
 - name: Create parameters for Diffie–Hellman (could take a while)
   ansible.builtin.command: "openssl dhparam -out /etc/coturn-dh-{{ coturn_dhparam_length }}.pem {{ coturn_dhparam_length }}"
   args:
     creates: /etc/coturn-dh-{{ coturn_dhparam_length }}.pem
   when: coturn_tls
   notify: Restart coturn
-
 - name: Gather package facts
   ansible.builtin.package_facts:
     manager: auto
-
 - name: Check whether jitsi-meet is installed
   ansible.builtin.set_fact:
     __jitsi_meet_installed: true
   when: "'jitsi-meet' in ansible_facts.packages"
-
 - name: Copy coturn config
   ansible.builtin.template:
     dest: /etc/turnserver.conf
@@ -42,14 +36,11 @@
     group: root
     mode: 0644
   notify: Restart coturn
-
 - name: Include systemd tasks
   ansible.builtin.import_tasks: systemd.yml
   when: ansible_service_mgr == "systemd"
-
 - name: Reload systemd and restart coturn if necessary
   ansible.builtin.meta: flush_handlers
-
 - name: Start coturn
   ansible.builtin.service:
     name: coturn

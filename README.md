@@ -1,41 +1,34 @@
-ansible-role-coturn
--------------------
+## ansible-role-coturn
 
-[![Build Status](https://github.com/systemli/ansible-role-coturn/workflows/Integration/badge.svg?branch=main)](https://github.com/systemli/ansible-role-coturn/actions?query=workflow%3AIntegration)
-
+[![Build Status](https://github.com/raypappa/ansible-role-coturn/workflows/Integration/badge.svg?branch=main)](https://github.com/raypappa/ansible-role-coturn/actions?query=workflow%3AIntegration)
 
 Install coturn for Nextcloud like described here:
-https://help.nextcloud.com/t/howto-setup-nextcloud-talk-with-turn-server/30794
+<https://help.nextcloud.com/t/howto-setup-nextcloud-talk-with-turn-server/30794>
 
 This role might be useful in conjunction with [systemli.nextcloud](https://galaxy.ansible.com/systemli/nextcloud) or [systemli.jitsi_meet](https://galaxy.ansible.com/systemli/jitsi_meet).
 
-Role Variables
---------------
+## Role Variables
 
 ### Required Variables
 
 The following variables are required (no defaults provided) and must always be
 defined when using the role:
 
-* `coturn_static_auth_secret`: Shared secret for client authentication. One way
+- `coturn_static_auth_secret`: Shared secret for client authentication. One way
   to generate an appropriate value is by using `pwgen -s 64 1`.
-* `coturn_realm`: Use a syntactically correct hostname or domain.
+- `coturn_realm`: Use a syntactically correct hostname or domain.
 
 ### Optional Variables
 
 See [defaults/main.yml](defaults/main.yml) for a list of optional variables.
 
-
-Download
---------
+## Download
 
 Download latest release with `ansible-galaxy`
 
-	ansible-galaxy install systemli.coturn
+ansible-galaxy install raypappa.coturn
 
-
-Testing & Development
----------------------
+## Testing & Development
 
 For developing and testing the role we use Github Actions and Molecule. On the local environment you can easily test the role with
 
@@ -43,12 +36,10 @@ For developing and testing the role we use Github Actions and Molecule. On the l
 molecule test
 ```
 
-License
--------
+## License
 
 GPLv3
 
-Author Information
-------------------
+## Fork
 
-https://www.systemli.org
+This repo was forked from [systemli](https://github.com/systemli/ansible-role-coturn)
