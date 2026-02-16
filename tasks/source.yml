@@ -48,7 +48,12 @@
       ansible.builtin.file:
         path: "{{ coturn_install_src_prom_temp_dir.path }}"
         state: absent
+- name: Source | Check coturn installed already
+  ansible.builtin.stat:
+    path: /usr/bin/turnserver
+  register: coturn_turnserver_stat
 - name: Source | Install coturn
+  when: not coturn_turnserver_stat.stat.exists
   block:
     - name: Source | Install coturn dependencies
       ansible.builtin.package:
