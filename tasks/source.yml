@@ -4,100 +4,106 @@
       - coturn
     state: absent
   when: ansible_facts['os_family']|lower == 'debian'
-- name: Source | Install prometheus-client-c dependencies
-  ansible.builtin.package:
-    name:
-      - ca-certificates
-      - cmake
-      - g++
-      - git
-      - make
-      - libmicrohttpd-dev
-- name: Source | Temporary directory for building prometheus-client-c
-  ansible.builtin.tempfile:
-    prefix: prometheus-client-c-src-
-    state: directory
-  register: coturn_install_src_prom_temp_dir
-- name: Source | clone prometheus-client-c source
-  ansible.builtin.unarchive:
-    src: https://github.com/digitalocean/prometheus-client-c/archive/refs/tags/v{{ coturn_install_src_prometheus_client_version }}.tar.gz
-    dest: "{{ coturn_install_src_prom_temp_dir.path }}"
-    remote_src: true
-    extra_opts:
-      - --strip-components=1
-- name: Source | create build directory for prometheus-client-c
-  ansible.builtin.file:
-    name: "{{ coturn_install_src_prom_temp_dir.path }}/prom/build"
-    state: directory
-- name: Source | build prometheus-client-c
-  environment:
-    TEST: "0"
-  ansible.builtin.shell:
-    chdir: "{{ coturn_install_src_prom_temp_dir.path }}/prom/build"
-    cmd: cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_BUILD_RPATH=TRUE -DCMAKE_C_FLAGS="-DPROM_LOG_ENABLE -g -O3" .. && make && make install
-    creates: /usr/lib/libprom.so
-- name: Source | Remove prometheus-client-c temporary directory
-  ansible.builtin.file:
-    path: "{{ coturn_install_src_prom_temp_dir.path }}"
-    state: absent
-- name: Source | Install coturn dependencies
-  ansible.builtin.package:
-    name:
-      - autoconf
-      - ca-certificates
-      - coreutils
-      - g++
-      - git
-      - libtool
-      - make
-      - pkg-config
-      - libevent-dev
-      - libssl-dev
-      - libpq-dev
-      - libmariadb-dev
-      - libsqlite3-dev
-      - libhiredis-dev
-      - libmongoc-dev
-      - libmicrohttpd-dev
-- name: Source | Temporary directory for building coturn
-  ansible.builtin.tempfile:
-    prefix: coturn-src-
-    state: directory
-  register: coturn_install_src_temp_dir
-- name: Source | Download source tarball
-  ansible.builtin.unarchive:
-    src: https://github.com/coturn/coturn/archive/refs/tags/docker/{{ coturn_install_src_version }}.tar.gz
-    dest: "{{ coturn_install_src_temp_dir.path }}"
-    remote_src: true
-    extra_opts:
-      - --strip-components=1
-- name: Source | build coturn
-  ansible.builtin.shell:
-    chdir: "{{ coturn_install_src_temp_dir.path }}"
-    cmd: ./configure --prefix=/usr --turndbdir=/var/lib/coturn --disable-rpath --sysconfdir=/etc/coturn  && make && make install
-    creates: /usr/bin/turnserver
-- name: Source | install coturn runtime dependencies
-  ansible.builtin.package:
-    name:
-      - libatomic1
-      - libcap2-bin
-      - libevent-2.1-7t64
-      - libevent-core-2.1-7t64
-      - libevent-extra-2.1-7t64
-      - libevent-openssl-2.1-7t64
-      - libevent-pthreads-2.1-7t64
-      - libssl3t64
-      - libpq5
-      - libmariadb3
-      - libsqlite3-0
-      - libhiredis1.1.0
-      - libmongoc-1.0-0t64
-      - libmicrohttpd12t64
-- name: Source | allow turnserver to use privileged ports
-  community.general.capabilities:
-    capability: cap_net_bind_service+ep
-    path: /usr/bin/turnserver
-- name: Source | Remove coturn temporary directory
-  ansible.builtin.file:
-    path: "{{ coturn_install_src_temp_dir.path }}"
-    state: absent
+- name: Source | Install prometheus-client-c
+  block:
+    - name: Source | Install prometheus-client-c dependencies
+      ansible.builtin.package:
+        name:
+          - ca-certificates
+          - cmake
+          - g++
+          - git
+          - make
+          - libmicrohttpd-dev
+    - name: Source | Temporary directory for building prometheus-client-c
+      ansible.builtin.tempfile:
+        prefix: prometheus-client-c-src-
+        state: directory
+      register: coturn_install_src_prom_temp_dir
+    - name: Source | clone prometheus-client-c source
+      ansible.builtin.unarchive:
+        src: https://github.com/digitalocean/prometheus-client-c/archive/refs/tags/v{{ coturn_install_src_prometheus_client_version }}.tar.gz
+        dest: "{{ coturn_install_src_prom_temp_dir.path }}"
+        remote_src: true
+        extra_opts:
+          - --strip-components=1
+    - name: Source | create build directory for prometheus-client-c
+      ansible.builtin.file:
+        name: "{{ coturn_install_src_prom_temp_dir.path }}/prom/build"
+        state: directory
+    - name: Source | build prometheus-client-c
+      environment:
+        TEST: "0"
+      ansible.builtin.shell:
+        chdir: "{{ coturn_install_src_prom_temp_dir.path }}/prom/build"
+        cmd: cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_BUILD_RPATH=TRUE -DCMAKE_C_FLAGS="-DPROM_LOG_ENABLE -g -O3" .. && make && make install
+        creates: /usr/lib/x86_64-linux-gnu/libprom.so
+  always:
+    - name: Source | Remove prometheus-client-c temporary directory
+      ansible.builtin.file:
+        path: "{{ coturn_install_src_prom_temp_dir.path }}"
+        state: absent
+- name: Source | Install coturn
+  block:
+    - name: Source | Install coturn dependencies
+      ansible.builtin.package:
+        name:
+          - autoconf
+          - ca-certificates
+          - coreutils
+          - g++
+          - git
+          - libtool
+          - make
+          - pkg-config
+          - libevent-dev
+          - libssl-dev
+          - libpq-dev
+          - libmariadb-dev
+          - libsqlite3-dev
+          - libhiredis-dev
+          - libmongoc-dev
+          - libmicrohttpd-dev
+    - name: Source | Temporary directory for building coturn
+      ansible.builtin.tempfile:
+        prefix: coturn-src-
+        state: directory
+      register: coturn_install_src_temp_dir
+    - name: Source | Download source tarball
+      ansible.builtin.unarchive:
+        src: https://github.com/coturn/coturn/archive/refs/tags/docker/{{ coturn_install_src_version }}.tar.gz
+        dest: "{{ coturn_install_src_temp_dir.path }}"
+        remote_src: true
+        extra_opts:
+          - --strip-components=1
+    - name: Source | build coturn
+      ansible.builtin.shell:
+        chdir: "{{ coturn_install_src_temp_dir.path }}"
+        cmd: ./configure --prefix=/usr --turndbdir=/var/lib/coturn --disable-rpath --sysconfdir=/etc/coturn  && make && make install
+        creates: /usr/bin/turnserver
+    - name: Source | install coturn runtime dependencies
+      ansible.builtin.package:
+        name:
+          - libatomic1
+          - libcap2-bin
+          - libevent-2.1-7t64
+          - libevent-core-2.1-7t64
+          - libevent-extra-2.1-7t64
+          - libevent-openssl-2.1-7t64
+          - libevent-pthreads-2.1-7t64
+          - libssl3t64
+          - libpq5
+          - libmariadb3
+          - libsqlite3-0
+          - libhiredis1.1.0
+          - libmongoc-1.0-0t64
+          - libmicrohttpd12t64
+    - name: Source | allow turnserver to use privileged ports
+      community.general.capabilities:
+        capability: cap_net_bind_service+ep
+        path: /usr/bin/turnserver
+    always:
+      - name: Source | Remove coturn temporary directory
+        ansible.builtin.file:
+          path: "{{ coturn_install_src_temp_dir.path }}"
+          state: absent
