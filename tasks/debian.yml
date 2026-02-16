@@ -1,0 +1,5 @@
+- name: Install coturn
+  ansible.builtin.apt:
+    pkg: coturn
+    state: present
+    cache_valid_time: 3600

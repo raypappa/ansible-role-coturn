@@ -1,7 +1,6 @@
----
 galaxy_info:
   role_name: coturn
-  author: systemli
+  author: raypappa
   description: Install and configure Coturn on Debian
   license: GPLv3
   min_ansible_version: "2.4"
