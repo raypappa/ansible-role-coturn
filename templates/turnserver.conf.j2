@@ -679,7 +679,7 @@ allowed-peer-ip={{ ip }}
 # Default is /var/run/turnserver.pid (if superuser account is used) or
 # /var/tmp/turnserver.pid .
 #
-#pidfile="/var/run/turnserver.pid"
+pidfile="/run/turnserver/turnserver.pid"
 
 # Require authentication of the STUN Binding request.
 # By default, the clients are allowed anonymous access to the STUN Binding functionality.
@@ -700,10 +700,10 @@ allowed-peer-ip={{ ip }}
 
 # TURN server allocates address family according TURN client requested address family.
 # If address family not requested explicitly by the client, then it falls back to this default.
-# The standard RFC explicitly define that this default must be IPv4, 
-# so use other option values with care! 
-# Possible values: "ipv4" or "ipv6" or "keep" 
-# "keep" sets the allocation default address family according to 
+# The standard RFC explicitly define that this default must be IPv4,
+# so use other option values with care!
+# Possible values: "ipv4" or "ipv6" or "keep"
+# "keep" sets the allocation default address family according to
 # the TURN client allocation request connection address family.
 #allocation-default-address-family="ipv4"
 #allocation-default-address-family="ipv4"
