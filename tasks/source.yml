@@ -28,7 +28,7 @@
   ansible.builtin.shell:
     chdir: "{{ coturn_install_src_prom_temp_dir }}/prom/build"
     cmd: cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_BUILD_RPATH=TRUE -DCMAKE_C_FLAGS="-DPROM_LOG_ENABLE -g -O3" .. && make && make install
-  creates: /usr/lib/libprom.so
+    creates: /usr/lib/libprom.so
 - name: Source | Remove prometheus-client-c temporary directory
   ansible.builtin.file:
     path: "{{ coturn_install_src_prom_temp_dir.path }}"
