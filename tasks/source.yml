@@ -115,8 +115,8 @@
       community.general.capabilities:
         capability: cap_net_bind_service+ep
         path: /usr/bin/turnserver
-    always:
-      - name: Source | Remove coturn temporary directory
-        ansible.builtin.file:
-          path: "{{ coturn_install_src_temp_dir.path }}"
-          state: absent
+  always:
+    - name: Source | Remove coturn temporary directory
+      ansible.builtin.file:
+        path: "{{ coturn_install_src_temp_dir.path }}"
+        state: absent
