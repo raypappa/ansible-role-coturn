@@ -16,9 +16,9 @@
     line: TURNSERVER_ENABLED=1
     regexp: "^#?TURNSERVER_ENABLED="
 - name: Create parameters for Diffie–Hellman (could take a while)
-  ansible.builtin.command: "openssl dhparam -out /etc/coturn-dh-{{ coturn_dhparam_length }}.pem {{ coturn_dhparam_length }}"
-  args:
-    creates: /etc/coturn-dh-{{ coturn_dhparam_length }}.pem
+  community.crypto.openssl_dhparam:
+    path: /etc/coturn-dh-{{ coturn_dhparam_length }}.pem
+    size: "{{ coturn_dhparam_length }}"
   when: coturn_tls
   notify: Restart coturn
 - name: Gather package facts
