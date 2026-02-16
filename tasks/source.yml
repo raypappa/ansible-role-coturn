@@ -4,7 +4,12 @@
       - coturn
     state: absent
   when: ansible_facts['os_family']|lower == 'debian'
+- name: Source | Check prometheus-client-c installed already
+  ansible.builtin.stat:
+    path: /usr/lib/x86_64-linux-gnu/libprom.so
+  register: coturn_prometheus_client_stat
 - name: Source | Install prometheus-client-c
+  when: not coturn_prometheus_client_stat.stat.exists
   block:
     - name: Source | Install prometheus-client-c dependencies
       ansible.builtin.package:
