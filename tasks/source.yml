@@ -73,7 +73,7 @@
       - --strip-components=1
 - name: Source | build coturn
   ansible.builtin.shell:
-    chdir: "{{ coturn_install_src_temp_dir }}"
+    chdir: "{{ coturn_install_src_temp_dir.path }}"
     cmd: ./configure --prefix=/usr --turndbdir=/var/lib/coturn --disable-rpath --sysconfdir=/etc/coturn  && make && make install
     creates: /usr/bin/turnserver
 - name: Source | install coturn runtime dependencies
