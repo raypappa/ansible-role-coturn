@@ -93,8 +93,7 @@
         creates: /usr/bin/turnserver
     - name: Source | Install coturn service
       ansible.builtin.copy:
-        remote_src: true
-        src: "{{ coturn_install_src_temp_dir.path }}/examples/etc/coturn.service"
+        src: coturn.service
         dest: "/etc/systemd/system/coturn.service"
         owner: root
         group: root
