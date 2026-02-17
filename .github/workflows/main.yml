@@ -21,4 +21,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - run: ls . molecule molecule/default molecule/default/molecule.yml && molecule test --scenario-name "${{ matrix.scenario }}"
+        with:
+          path: "${{ github.repository }}"
+      - run: cd "${{ github.repository }}" && molecule test --scenario-name "${{ matrix.scenario }}"
