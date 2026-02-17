@@ -17,8 +17,7 @@ jobs:
         scenario:
           - default
     steps:
-      - uses: gacts/install-podman@v1
-      - run: podman version
+      - run: sudo apt install podman -y && podman version
       - name: Checkout
         uses: actions/checkout@v2
         with:
