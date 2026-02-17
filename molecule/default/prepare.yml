@@ -1,8 +1,13 @@
----
-- name: Prepare
+- name: Prepare container instances
   hosts: all
-  become: yes
+  gather_facts: true
+  become: true
   tasks:
     - name: Run the equivalent of "apt-get update" before installing packages
-      ansible.builtin.apt:
+      ansible.builtin.package:
         update_cache: yes
+    - name: Install required packages
+      ansible.builtin.package:
+        name: "{{ required_packages }}"
+        state: present
+      when: required_packages is defined

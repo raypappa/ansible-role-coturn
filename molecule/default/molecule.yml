@@ -1,24 +1,19 @@
----
-driver:
-  name: docker
-
-platforms:
-  - name: debian13
-    image: "geerlingguy/docker-debian13-ansible:latest"
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-      - /var/lib/containerd
-    cgroupns_mode: host
-    privileged: true
-    pre_build_image: true
-
-provisioner:
-  name: ansible
-  ansible_args:
-    - --diff
-
 dependency:
   name: galaxy
   options:
-    requirements-file: requirements.yml
+    requirements-file: ../requirements.yml
+ansible:
+  executor:
+    args:
+      ansible_playbook:
+        - --inventory=${MOLECULE_SCENARIO_DIRECTORY}/hosts
+scenario:
+  test_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - verify
+    - cleanup
+    - destroy

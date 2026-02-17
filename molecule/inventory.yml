@@ -1,0 +1,12 @@
+all:
+  children:
+    webservers:
+      hosts:
+        debian13:
+          container_image: geerlingguy/docker-debian13-ansible:latest
+          container_command: /sbin/init
+          container_privileged: true
+      vars:
+        required_packages:
+          - python3
+          - systemd
