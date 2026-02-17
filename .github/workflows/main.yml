@@ -23,5 +23,4 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: "${{ github.repository }}"
-      - run: dnf install podman -y && podman version
       - run: molecule test --scenario --scenario-name "${{ matrix.scenario }}"
