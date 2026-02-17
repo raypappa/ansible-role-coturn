@@ -11,22 +11,17 @@ on:
 jobs:
   molecule:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ansible/community-ansible-dev-tools:latest
     strategy:
       fail-fast: false
       matrix:
         scenario:
           - default
     steps:
-      - run: sudo apt install podman -y && podman version
       - name: Checkout
         uses: actions/checkout@v2
         with:
           path: "${{ github.repository }}"
-      - name: Molecule
-        uses: gofrolist/molecule-action@v2.7.89
-        with:
-          # molecule_options: --debug --base-config molecule/_shared/base.yml
-          molecule_command: test
-          molecule_args: --scenario-name ${{ matrix.scenario }}
-        env:
-          ANSIBLE_FORCE_COLOR: '1'
+      - run: sudo dnf install podman -y && podman version
+      - run: molecule test --scenario --scenario-name "${{ matrix.scenario }}"
