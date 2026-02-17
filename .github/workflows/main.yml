@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/ansible/community-ansible-dev-tools:latest
-      options: --storage-opt=overlay.mount_program=/usr/bin/fuse-overlayfs --storage-driver=overlay
+      options: --storage-opt=overlay.mount_program=/usr/bin/fuse-overlayfs
+      # --storage-driver=overlay
       # cgroup_manager: cgroupfs
     strategy:
       fail-fast: false
