@@ -75,5 +75,5 @@ coturn_max_bps: 0
 # streams are treated separately).
 coturn_bps_capacity: 0
 coturn_install: "pkg"
-coturn_install_src_version: "4.8.0-r1"
+coturn_install_src_version: "4.8.0"
 coturn_install_src_prometheus_client_version: "0.1.3"

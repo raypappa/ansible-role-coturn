@@ -81,7 +81,7 @@
       register: coturn_install_src_temp_dir
     - name: Source | Download source tarball
       ansible.builtin.unarchive:
-        src: https://github.com/coturn/coturn/archive/refs/tags/docker/{{ coturn_install_src_version }}.tar.gz
+        src: https://github.com/coturn/coturn/archive/refs/tags/{{ coturn_install_src_version }}.tar.gz
         dest: "{{ coturn_install_src_temp_dir.path }}"
         remote_src: true
         extra_opts:
