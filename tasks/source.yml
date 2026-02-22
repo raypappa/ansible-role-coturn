@@ -1,3 +1,4 @@
+---
 - name: Source | Ensure no binaries pre-installed
   ansible.builtin.package:
     name:
@@ -27,7 +28,8 @@
       register: coturn_install_src_prom_temp_dir
     - name: Source | clone prometheus-client-c source
       ansible.builtin.unarchive:
-        src: https://github.com/digitalocean/prometheus-client-c/archive/refs/tags/v{{ coturn_install_src_prometheus_client_version }}.tar.gz
+        src: https://github.com/digitalocean/prometheus-client-c/archive/refs/tags/v{{
+          coturn_install_src_prometheus_client_version }}.tar.gz
         dest: "{{ coturn_install_src_prom_temp_dir.path }}"
         remote_src: true
         extra_opts:
@@ -41,7 +43,8 @@
         TEST: "0"
       ansible.builtin.shell:
         chdir: "{{ coturn_install_src_prom_temp_dir.path }}/prom/build"
-        cmd: cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_BUILD_RPATH=TRUE -DCMAKE_C_FLAGS="-DPROM_LOG_ENABLE -g -O3" .. && make && make install
+        cmd: cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_SKIP_BUILD_RPATH=TRUE
+          -DCMAKE_C_FLAGS="-DPROM_LOG_ENABLE -g -O3" .. && make && make install
         creates: /usr/lib/x86_64-linux-gnu/libprom.so
   always:
     - name: Source | Remove prometheus-client-c temporary directory
@@ -81,7 +84,8 @@
       register: coturn_install_src_temp_dir
     - name: Source | Download source tarball
       ansible.builtin.unarchive:
-        src: https://github.com/coturn/coturn/archive/refs/tags/{{ coturn_install_src_version }}.tar.gz
+        src: https://github.com/coturn/coturn/archive/refs/tags/{{ coturn_install_src_version
+          }}.tar.gz
         dest: "{{ coturn_install_src_temp_dir.path }}"
         remote_src: true
         extra_opts:
@@ -89,7 +93,8 @@
     - name: Source | build coturn
       ansible.builtin.shell:
         chdir: "{{ coturn_install_src_temp_dir.path }}"
-        cmd: ./configure --prefix=/usr --turndbdir=/var/lib/coturn --disable-rpath --sysconfdir=/etc/coturn  && make && make install
+        cmd: ./configure --prefix=/usr --turndbdir=/var/lib/coturn --disable-rpath
+          --sysconfdir=/etc/coturn  && make && make install
         creates: /usr/bin/turnserver
     - name: Source | Install coturn service
       ansible.builtin.copy:

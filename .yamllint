@@ -1,33 +1,33 @@
 ---
-# Based on ansible-lint config
+# vim: ft=yaml:
 extends: default
-
+ignore: |
+  node_modules
+  .serverless
+  .terraform
 rules:
-  braces:
-    max-spaces-inside: 1
+  document-start:
+    present: true
     level: error
-  brackets:
-    max-spaces-inside: 1
-    level: error
-  colons:
-    max-spaces-after: -1
-    level: error
-  commas:
-    max-spaces-after: -1
-    level: error
-  comments: disable
-  comments-indentation: disable
-  document-start: disable
-  empty-lines:
-    max: 3
-    level: error
-  hyphens:
-    level: error
-  indentation: disable
-  key-duplicates: enable
-  line-length: disable
-  new-line-at-end-of-file: disable
-  new-lines:
-    type: unix
-  trailing-spaces: disable
-  truthy: disable
+  # Don't warn on line length
+  line-length: false
+  # Certain systems (e.g. ansible) document yes/no as valid values
+  truthy: enable
+  comments-indentation: false
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
+  comments:
+    min-spaces-from-content: 1
+  # braces:
+  #   forbid: true
+  #   level: warning
+  # brackets:
+  #   forbid: true
+  #   level: warning
+  commas: enable
+  quoted-strings:
+    quote-type: double
+    required: only-when-needed
+    level: warning
+  trailing-spaces: enable

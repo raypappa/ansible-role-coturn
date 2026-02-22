@@ -1,3 +1,4 @@
+---
 - name: Install using APT
   ansible.builtin.import_tasks: debian.yml
   when: coturn_install == "pkg" and ansible_facts['os_family']|lower == 'debian'
@@ -45,3 +46,4 @@
   ansible.builtin.service:
     name: coturn
     state: started
+  when: coturn_start_service

@@ -1,3 +1,4 @@
+---
 - name: bootstrap instances
   hosts: molecule
   gather_facts: false
